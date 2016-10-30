@@ -17,15 +17,45 @@ from scipy import stats
 # Anova to compare the length of songs, POS counts, Type-Token ratio, the noun that has been using
 #################
 #################
-#Task1 : summary 
+#Task1 : summary by year : number of songs,length of song and standard deviation
 ##################
-dataset_summary=dfnew_two.describe()
-dataset_summary.to_csv("data_summary.csv")
+
+summary_1960s=dfnew_two[dfnew_two["Year"]=="1960s"].describe()
+summary_1970s=dfnew_two[dfnew_two["Year"]=="1970s"].describe()
+summary_1980s=dfnew_two[dfnew_two["Year"]=="1980s"].describe()
+summary_1990s=dfnew_two[dfnew_two["Year"]=="1990s"].describe()
+summary_2000s=dfnew_two[dfnew_two["Year"]=="2000s"].describe()
+summary_2010s=dfnew_two[dfnew_two["Year"]=="2010s"].describe()
+summary_dict=dict()
+summary_dict[0]={"Year":"1960s","Song_Numbers":summary_1960s.ix[0,0],"Average_Lyrics_Length":summary_1960s.ix[1,0],"Sd":summary_1960s.ix[2,0]}
+summary_dict[1]={"Year":"1970s","Song_Numbers":summary_1970s.ix[0,0],"Average_Lyrics_Length":summary_1970s.ix[1,0],"Sd":summary_1970s.ix[2,0]}
+summary_dict[2]={"Year":"1980s","Song_Numbers":summary_1980s.ix[0,0],"Average_Lyrics_Length":summary_1980s.ix[1,0],"Sd":summary_1980s.ix[2,0]}
+summary_dict[3]={"Year":"1990s","Song_Numbers":summary_1990s.ix[0,0],"Average_Lyrics_Length":summary_1990s.ix[1,0],"Sd":summary_1990s.ix[2,0]}
+summary_dict[4]={"Year":"2000s","Song_Numbers":summary_2000s.ix[0,0],"Average_Lyrics_Length":summary_2000s.ix[1,0],"Sd":summary_2000s.ix[2,0]}
+summary_dict[5]={"Year":"2010s","Song_Numbers":summary_2010s.ix[0,0],"Average_Lyrics_Length":summary_2010s.ix[1,0],"Sd":summary_2010s.ix[2,0]}
+summary_1970s.ix[[1,2],:]
+
+################################
+# super important : summary_dict is the object to store all the statistical result.
+###############################
 ##################
 ###################
-# Type-Token-ratio
+# Task2 : Type-Token-ratio
 ####################
+tt_ratio_dict=dict()
+for i in range(len(dfnew_two)):
+  frequency=FreqDist(dfnew_two["Unigram"].iloc[i])
+  type_number=len(frequency.keys())
+  token_number=sum(frequency.values())
+  tt_ratio=type_number/token_number
+  tt_ratio_dict[i]=tt_ratio
 
+dfnew_two["TTR"]=0  
+for i in range(len(tt_ratio_dict)):
+  dfnew_two["TTR"].iloc[i]=tt_ratio_dict[i]
+
+
+####################
 #Task3 : visualize every POS tags by year
 ###################
 # all sorts of verb 
